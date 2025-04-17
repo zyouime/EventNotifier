@@ -41,7 +41,7 @@ public class EventNotifier implements ModInitializer {
             WEB_SOCKET = new WebSocket(new URI("ws://localhost:8080/events"));
             WEB_SOCKET.connect();
         } catch (URISyntaxException e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         ModConfig.initialize();
         settings = new Settings();
@@ -102,7 +102,7 @@ public class EventNotifier implements ModInitializer {
 
         public boolean isRenderEvent(String eventName) {
             BooleanSetting setting = eventRenderMap.get(eventName);
-            return setting != null ? setting.getValue() : true;
+            return setting != null && !setting.getValue();
         }
 
         private <T extends Setting<?>> T register(T t) {

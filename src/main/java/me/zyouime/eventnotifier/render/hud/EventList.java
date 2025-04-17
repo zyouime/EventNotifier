@@ -53,7 +53,7 @@ public class EventList implements Wrapper {
         if (!events.isEmpty()) {
             int count = 0;
             for (Event event : events) {
-                if (!eventNotifier.settings.isRenderEvent(event.getEvent())) continue;
+                if (eventNotifier.settings.isRenderEvent(event.getEvent())) continue;
                 count++;
             }
             f = count;
@@ -74,7 +74,7 @@ public class EventList implements Wrapper {
         float offsetY = 30;
         context.enableScissor((int) renderX + 2, (int) renderY + 26, (int) (renderX + width - 2), (int) (renderY + height - 8));
         for (Event event : events) {
-            if (!eventNotifier.settings.isRenderEvent(event.getEvent())) continue;
+            if (eventNotifier.settings.isRenderEvent(event.getEvent())) continue;
             float eventY = renderY + offsetY - (float) scrollAmount;
             Color eventColor = eventFormatting.getOrDefault(event.getEvent(), EventDisplayInfo.UNKNOWN).color;
             int u = eventFormatting.getOrDefault(event.getEvent(), EventDisplayInfo.UNKNOWN).u;
