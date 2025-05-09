@@ -12,17 +12,15 @@ import static me.zyouime.eventnotifier.render.font.FontRenderers.mainFont;
 public class Prikol {
     private final String message;
     private final long aliveTime;
-    private final Identifier texture;
+    private Identifier texture = null;
 
     public Prikol(String message) {
         this.message = message;
         this.aliveTime = System.currentTimeMillis() + 3000;
-        this.texture = null;
     }
 
     public Prikol(String message, Identifier texture) {
-        this.message = message;
-        this.aliveTime = System.currentTimeMillis() + 3000;
+        this(message);
         this.texture = texture;
     }
 
