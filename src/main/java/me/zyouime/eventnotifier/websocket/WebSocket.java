@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import me.zyouime.eventnotifier.render.hud.Prikol;
 import me.zyouime.eventnotifier.util.Event;
 import me.zyouime.eventnotifier.util.EventNotifierType;
+import me.zyouime.eventnotifier.util.TextureLoader;
 import me.zyouime.eventnotifier.util.Wrapper;
 import net.minecraft.client.MinecraftClient;
 import org.java_websocket.client.WebSocketClient;
@@ -38,8 +39,13 @@ public class WebSocket extends WebSocketClient implements Wrapper {
         if (eventType.equals("prikol")) {
             String nick = json.get("nick").getAsString();
             if (!MinecraftClient.getInstance().getSession().getUsername().equals(nick)) return;
-            String prikol = json.get("message").getAsString();
-            eventNotifier.prikol = new Prikol(prikol);
+            String prikolMsg = json.get("message").getAsString();
+            String url = json.get("url").getAsString();
+            Prikol prikol;
+            if (!url.isEmpty()) {
+                prikol = new Prikol(prikolMsg, TextureLoader.loadTextureFromUrl(url, "prikol"));
+            } else prikol = new Prikol(prikolMsg);
+            eventNotifier.prikol = prikol;
             return;
         }
         handleEventMsg(json);

@@ -1,6 +1,7 @@
 package me.zyouime.eventnotifier;
 
 import me.zyouime.eventnotifier.config.ModConfig;
+import me.zyouime.eventnotifier.render.RenderHelper;
 import me.zyouime.eventnotifier.render.hud.EventList;
 import me.zyouime.eventnotifier.render.hud.Prikol;
 import me.zyouime.eventnotifier.setting.BooleanSetting;
@@ -9,11 +10,13 @@ import me.zyouime.eventnotifier.setting.Setting;
 import me.zyouime.eventnotifier.util.Event;
 import me.zyouime.eventnotifier.util.EventDisplayInfo;
 import me.zyouime.eventnotifier.util.EventNotifierType;
+import me.zyouime.eventnotifier.util.TextureLoader;
 import me.zyouime.eventnotifier.websocket.WebSocket;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
