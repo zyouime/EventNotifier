@@ -2,6 +2,7 @@ package me.zyouime.eventnotifier;
 
 import me.zyouime.eventnotifier.config.ModConfig;
 import me.zyouime.eventnotifier.render.hud.EventList;
+import me.zyouime.eventnotifier.render.hud.Prikol;
 import me.zyouime.eventnotifier.setting.BooleanSetting;
 import me.zyouime.eventnotifier.setting.NumberSetting;
 import me.zyouime.eventnotifier.setting.Setting;
@@ -19,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,10 +33,14 @@ public class EventNotifier implements ModInitializer {
     private static EventNotifier instance;
     public Settings settings;
     public static final Logger LOGGER = LoggerFactory.getLogger("EventNotifier");
+    public Prikol prikol = null;
+
+    public EventNotifier() {
+        instance = this;
+    }
 
     @Override
     public void onInitialize() {
-        instance = this;
         try {
             WEB_SOCKET = new WebSocket(new URI("ws://localhost:8080/events"));
             WEB_SOCKET.connect();
@@ -47,12 +51,23 @@ public class EventNotifier implements ModInitializer {
         settings = new Settings();
         eventType = (EventNotifierType) ModConfig.configData.getField("eventType");
         eventList = new EventList();
+        this.registerEvents();
+    }
+
+    private void registerEvents() {
         HudRenderCallback.EVENT.register(((drawContext, tickDelta) -> {
             if (MinecraftClient.getInstance().currentScreen == null) {
                 eventList.render(drawContext);
             }
+            if (prikol != null) {
+                prikol.render(drawContext);
+            }
         }));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (prikol != null && prikol.isEnded()) {
+                prikol = null;
+            }
+
             if (eventType == EventNotifierType.UPCOMING) {
                 events.removeIf(event -> {
                     event.tick();
@@ -87,18 +102,19 @@ public class EventNotifier implements ModInitializer {
         public NumberSetting x = register(new NumberSetting("x"));
         public NumberSetting y = register(new NumberSetting("y"));
 
-        public final Map<String, BooleanSetting> eventRenderMap = new HashMap<>() {{
-            put("Босс", showBoss);
-            put("Смертельная шахта", showDeathMine);
-            put("Цветочная поляна", showGlade);
-            put("Посылка", showParcel);
-            put("Груз", showCargo);
-            put("Корабль", showShip);
-            put("Голосование", showVote);
-            put("Контейнер", showContainer);
-            put("Золотая лихорадка", showFever);
-            put("Опытный Тыпо", showTipo);
-        }};
+        public final Map<String, BooleanSetting> eventRenderMap = Map.of(
+                "Босс", showBoss,
+                "Смертельная шахта", showDeathMine,
+                "Цветочная поляна", showGlade,
+                "Посылка", showParcel,
+                "Груз", showCargo,
+                "Корабль", showShip,
+                "Голосование", showVote,
+                "Контейнер", showContainer,
+                "Золотая лихорадка", showFever,
+                "Опытный Тыпо", showTipo
+        );
+
 
         public boolean isRenderEvent(String eventName) {
             BooleanSetting setting = eventRenderMap.get(eventName);

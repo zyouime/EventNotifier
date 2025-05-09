@@ -334,11 +334,6 @@ public class FontRenderer implements Closeable {
         return currentLine + previous;
     }
 
-
-    public static @NotNull FontRenderer create(float size) throws IOException, FontFormatException {
-        return new FontRenderer(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(EventNotifier.class.getClassLoader().getResourceAsStream("assets/eventnotifier/fonts/sf_medium.ttf"))).deriveFont(Font.PLAIN, size / 2f), size / 2f);
-    }
-
     @Override
     public void close() {
         try {

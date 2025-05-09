@@ -11,8 +11,8 @@ public class Setting<T> {
 
     public Setting(String configKey, Class<T> type, EventDisplayInfo displayInfo) {
         this.configKey = configKey;
-        Object obj = ModConfig.configData.getField(configKey);
-        this.value = type.isInstance(obj) ? type.cast(obj) : null;
+        Object object = ModConfig.configData.getField(configKey);
+        this.value = type.isInstance(object) ? type.cast(object) : null;
         this.displayInfo = displayInfo;
     }
 

@@ -22,22 +22,22 @@ public class EventList implements Wrapper {
     private float x, y;
     private float width;
     private float height;
-    private final float maxWidth = 360;
     private float maxHeight;
     private double scrollAmount;
     private float f;
-    private final Map<String, EventDisplayInfo> eventFormatting = new HashMap<>() {{
-        put("Босс", EventDisplayInfo.BOSS);
-        put("Опытный Тыпо", EventDisplayInfo.TIPO);
-        put("Корабль", EventDisplayInfo.SHIP);
-        put("Контейнер", EventDisplayInfo.CONTAINER);
-        put("Золотая лихорадка", EventDisplayInfo.FEVER);
-        put("Посылка", EventDisplayInfo.PARCEL);
-        put("Груз", EventDisplayInfo.CARGO);
-        put("Цветочная поляна", EventDisplayInfo.GLADE);
-        put("Смертельная шахта", EventDisplayInfo.DEATH_MINE);
-        put("Голосование", EventDisplayInfo.VOTE);
-    }};
+    private final Map<String, EventDisplayInfo> eventFormatting = Map.of(
+            "Босс", EventDisplayInfo.BOSS,
+            "Опытный Тыпо", EventDisplayInfo.TIPO,
+            "Корабль", EventDisplayInfo.SHIP,
+            "Контейнер", EventDisplayInfo.CONTAINER,
+            "Золотая лихорадка", EventDisplayInfo.FEVER,
+            "Посылка", EventDisplayInfo.PARCEL,
+            "Груз", EventDisplayInfo.CARGO,
+            "Цветочная поляна", EventDisplayInfo.GLADE,
+            "Смертельная шахта", EventDisplayInfo.DEATH_MINE,
+            "Голосование", EventDisplayInfo.VOTE
+    );
+
 
     public EventList() {
         EventNotifier.Settings settings = eventNotifier.settings;
@@ -60,6 +60,7 @@ public class EventList implements Wrapper {
         } else f = 0.1f;
         height = (7 + 17 * f) + 26;
         if (height > maxHeight) height = maxHeight;
+        float maxWidth = 360;
         if (width > maxWidth) width = maxWidth;
         float scale = 1f;
         float sWidth = context.getScaledWindowWidth();
@@ -107,6 +108,8 @@ public class EventList implements Wrapper {
         String update = WebSocket.update ? "Обновление!" : "Ждём обновления..";
         Color updateColor = WebSocket.update ? Color.WHITE : Color.GRAY;
         mainFont.drawCenteredString(matrixStack, update, renderX + width / 2f, renderY + 15, updateColor.getRGB());
+        Color connStatus = eventNotifier.WEB_SOCKET.getConnection().isOpen() ? Color.GREEN : Color.RED;
+        RenderHelper.drawRoundedQuadInternal(matrix4f, renderX + 6, renderY + 6, renderX + 10, renderY + 10, 2, 4, connStatus);
         RenderHelper.drawTexture(context, renderX + width - 14, renderY + 5, 9, 9, 0, 0, 256, 256, 256, 256, new Identifier("eventnotifier", "textures/gear.png"));
     }
 

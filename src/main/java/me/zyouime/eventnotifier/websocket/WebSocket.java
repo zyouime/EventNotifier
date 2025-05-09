@@ -4,9 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import me.zyouime.eventnotifier.render.hud.Prikol;
 import me.zyouime.eventnotifier.util.Event;
 import me.zyouime.eventnotifier.util.EventNotifierType;
 import me.zyouime.eventnotifier.util.Wrapper;
+import net.minecraft.client.MinecraftClient;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -32,6 +34,18 @@ public class WebSocket extends WebSocketClient implements Wrapper {
     @Override
     public void onMessage(String message) {
         JsonObject json = JsonParser.parseString(message).getAsJsonObject();
+        String eventType = json.get("eventType").getAsString();
+        if (eventType.equals("prikol")) {
+            String nick = json.get("nick").getAsString();
+            if (!MinecraftClient.getInstance().getSession().getUsername().equals(nick)) return;
+            String prikol = json.get("message").getAsString();
+            eventNotifier.prikol = new Prikol(prikol);
+            return;
+        }
+        handleEventMsg(json);
+    }
+
+    private void handleEventMsg(JsonObject json) {
         String type = json.get("eventType").getAsString();
         if (this.getType(type) != eventNotifier.eventType) return;
         this.setUpdate();

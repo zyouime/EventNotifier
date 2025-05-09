@@ -16,7 +16,7 @@ public enum EventDisplayInfo {
     VOTE(Color.PINK, 0, 0, "Голосование", "textures/vote.png"),
     UNKNOWN(Color.WHITE, 0, 0, "Неизвестно", "textures/unknown.png"),
     WIDTH(Color.WHITE, 0, 0, "Ширина", "textures/size.png"),
-    HEIGHT(Color.WHITE, 0, 0, "Высота", "textures/size.png");
+    HEIGHT(Color.WHITE, 0, 0, "Максимальная высота", "textures/size.png");
 
     public final Color color;
     public final int u;
