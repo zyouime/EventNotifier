@@ -11,8 +11,6 @@
   "client": [
     "ChatScreenMixin",
     "INativeImageMixin",
-    "MinecraftClientMixin",
-    "SessionMixin",
-    "TitleScreenMixin"
+    "MinecraftClientMixin"
   ]
 }
