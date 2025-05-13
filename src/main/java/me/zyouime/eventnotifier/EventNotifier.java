@@ -1,5 +1,6 @@
 package me.zyouime.eventnotifier;
 
+import com.google.gson.JsonObject;
 import me.zyouime.eventnotifier.config.ModConfig;
 import me.zyouime.eventnotifier.render.RenderHelper;
 import me.zyouime.eventnotifier.render.hud.EventList;
@@ -37,6 +38,7 @@ public class EventNotifier implements ModInitializer {
     public Settings settings;
     public static final Logger LOGGER = LoggerFactory.getLogger("EventNotifier");
     public Prikol prikol = null;
+    public static boolean initialized;
 
     public EventNotifier() {
         instance = this;
@@ -83,6 +85,14 @@ public class EventNotifier implements ModInitializer {
 
     public static EventNotifier getInstance() {
         return instance;
+    }
+
+    public void sendRegisterMsg(String user) {
+        JsonObject json = new JsonObject();
+        json.addProperty("nick", user);
+        if (WEB_SOCKET.getConnection().isOpen()) {
+            WEB_SOCKET.send(json.toString());
+        }
     }
 
     public static class Settings {

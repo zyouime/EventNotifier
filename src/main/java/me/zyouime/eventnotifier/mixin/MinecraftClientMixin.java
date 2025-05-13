@@ -1,5 +1,6 @@
 package me.zyouime.eventnotifier.mixin;
 
+import me.zyouime.eventnotifier.EventNotifier;
 import me.zyouime.eventnotifier.render.font.FontRenderers;
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;

@@ -10,6 +10,7 @@ import me.zyouime.eventnotifier.util.EventNotifierType;
 import me.zyouime.eventnotifier.util.TextureLoader;
 import me.zyouime.eventnotifier.util.Wrapper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -37,18 +38,18 @@ public class WebSocket extends WebSocketClient implements Wrapper {
         JsonObject json = JsonParser.parseString(message).getAsJsonObject();
         String eventType = json.get("eventType").getAsString();
         if (eventType.equals("prikol")) {
-            String nick = json.get("nick").getAsString();
-            if (!MinecraftClient.getInstance().getSession().getUsername().equals(nick)) return;
-            String prikolMsg = json.get("message").getAsString();
-            String url = json.get("url").getAsString();
-            Prikol prikol;
-            if (!url.isEmpty()) {
-                prikol = new Prikol(prikolMsg, TextureLoader.loadTextureFromUrl(url, "prikol"));
-            } else prikol = new Prikol(prikolMsg);
-            eventNotifier.prikol = prikol;
-            return;
-        }
-        handleEventMsg(json);
+            handlePrikolMsg(json);
+        } else handleEventMsg(json);
+    }
+
+    private void handlePrikolMsg(JsonObject json) {
+        String prikolMsg = json.get("message").getAsString();
+        String url = json.get("url").getAsString();
+        Prikol prikol;
+        if (!url.isEmpty()) {
+            prikol = new Prikol(prikolMsg, TextureLoader.loadTextureFromUrl(url, "prikol"));
+        } else prikol = new Prikol(prikolMsg);
+        eventNotifier.prikol = prikol;
     }
 
     private void handleEventMsg(JsonObject json) {

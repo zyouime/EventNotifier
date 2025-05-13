@@ -13,7 +13,7 @@ import java.net.URL;
 
 public class TextureLoader {
 
-    public static Identifier loadTextureFromUrl(String url, String textureName) {
+    public static UrlTexture loadTextureFromUrl(String url, String textureName) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setInstanceFollowRedirects(true);          
@@ -36,8 +36,9 @@ public class TextureLoader {
                         EventNotifier.LOGGER.error("Не получилось загрузить текстуру, ошибка: " + e.getMessage());
                     }
                 });
+                UrlTexture urlTexture = new UrlTexture(id, image.getWidth(), image.getHeight());
                 connection.disconnect();
-                return id;
+                return urlTexture;
             }
         } catch (Exception e) {
             return null;
