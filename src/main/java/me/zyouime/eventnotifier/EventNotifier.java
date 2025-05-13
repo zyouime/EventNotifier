@@ -33,7 +33,7 @@ public class EventNotifier implements ModInitializer {
     public Settings settings;
     public static final Logger LOGGER = LoggerFactory.getLogger("EventNotifier");
 //    public Prikol prikol = null;
-    public static boolean initialized;
+//    public static boolean initialized;
 
     public EventNotifier() {
         instance = this;

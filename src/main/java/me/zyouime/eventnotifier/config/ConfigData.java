@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 public class ConfigData {
 
     float height = 260;
-    float width = 100;
+    float width = 120;
     float x = 50;
     float y = -50;
     EventNotifierType eventType = EventNotifierType.CURRENT;

@@ -54,7 +54,7 @@ public class WebSocket extends WebSocketClient implements Wrapper {
         if (this.getType(type) != eventNotifier.eventType) return;
         this.setUpdate();
         JsonArray jsonArray = json.get("events").getAsJsonArray();
-        if (type.equalsIgnoreCase("current") && eventNotifier.eventType == EventNotifierType.CURRENT) events.clear();
+        if (type.equals("current") && eventNotifier.eventType == EventNotifierType.CURRENT) events.clear();
         for (JsonElement element : jsonArray.asList()) {
             JsonObject jsonObject = element.getAsJsonObject();
             String eventName = jsonObject.get("event").getAsString();
