@@ -4,13 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import me.zyouime.eventnotifier.render.hud.Prikol;
 import me.zyouime.eventnotifier.util.Event;
 import me.zyouime.eventnotifier.util.EventNotifierType;
-import me.zyouime.eventnotifier.util.TextureLoader;
 import me.zyouime.eventnotifier.util.Wrapper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -35,22 +31,23 @@ public class WebSocket extends WebSocketClient implements Wrapper {
 
     @Override
     public void onMessage(String message) {
-        JsonObject json = JsonParser.parseString(message).getAsJsonObject();
-        String eventType = json.get("eventType").getAsString();
-        if (eventType.equals("prikol")) {
-            handlePrikolMsg(json);
-        } else handleEventMsg(json);
+        handleEventMsg(JsonParser.parseString(message).getAsJsonObject());
+//        JsonObject json = JsonParser.parseString(message).getAsJsonObject();
+//        String eventType = json.get("eventType").getAsString();
+//        if (eventType.equals("prikol")) {
+//            handlePrikolMsg(json);
+//        } else handleEventMsg(json);
     }
 
-    private void handlePrikolMsg(JsonObject json) {
-        String prikolMsg = json.get("message").getAsString();
-        String url = json.get("url").getAsString();
-        Prikol prikol;
-        if (!url.isEmpty()) {
-            prikol = new Prikol(prikolMsg, TextureLoader.loadTextureFromUrl(url, "prikol"));
-        } else prikol = new Prikol(prikolMsg);
-        eventNotifier.prikol = prikol;
-    }
+//    private void handlePrikolMsg(JsonObject json) {
+//        String prikolMsg = json.get("message").getAsString();
+//        String url = json.get("url").getAsString();
+//        Prikol prikol;
+//        if (!url.isEmpty()) {
+//            prikol = new Prikol(prikolMsg, TextureLoader.loadTextureFromUrl(url, "prikol"));
+//        } else prikol = new Prikol(prikolMsg);
+//        eventNotifier.prikol = prikol;
+//    }
 
     private void handleEventMsg(JsonObject json) {
         String type = json.get("eventType").getAsString();
