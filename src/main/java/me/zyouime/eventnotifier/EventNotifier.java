@@ -32,8 +32,6 @@ public class EventNotifier implements ModInitializer {
     private static EventNotifier instance;
     public Settings settings;
     public static final Logger LOGGER = LoggerFactory.getLogger("EventNotifier");
-//    public Prikol prikol = null;
-//    public static boolean initialized;
 
     public EventNotifier() {
         instance = this;
@@ -59,15 +57,8 @@ public class EventNotifier implements ModInitializer {
             if (MinecraftClient.getInstance().currentScreen == null) {
                 eventList.render(drawContext);
             }
-//            if (prikol != null) {
-//                prikol.render(drawContext);
-//            }
         }));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-//            if (prikol != null && prikol.isEnded()) {
-//                prikol = null;
-//            }
-
             if (eventType == EventNotifierType.UPCOMING) {
                 events.removeIf(event -> {
                     event.tick();
@@ -81,14 +72,6 @@ public class EventNotifier implements ModInitializer {
     public static EventNotifier getInstance() {
         return instance;
     }
-
-//    public void sendRegisterMsg(String user) {
-//        JsonObject json = new JsonObject();
-//        json.addProperty("nick", user);
-//        if (WEB_SOCKET.getConnection().isOpen()) {
-//            WEB_SOCKET.send(json.toString());
-//        }
-//    }
 
     public static class Settings {
 
