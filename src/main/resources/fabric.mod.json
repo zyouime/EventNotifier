@@ -3,8 +3,8 @@
   "id": "eventnotifier",
   "version": "${version}",
   "name": "EventNotifier",
-  "description": "",
-  "authors": [],
+  "description": "Оповещалка ивентов сервера HolyWorld прямо в майнкрафте.\nИнформация берётся из бота §6Зако",
+  "authors": ["zyouime13"],
   "contact": {},
   "license": "MIT",
   "icon": "assets/eventnotifier/icon.png",
@@ -12,6 +12,9 @@
   "entrypoints": {
     "main": [
       "me.zyouime.eventnotifier.EventNotifier"
+    ],
+    "modmenu": [
+      "me.zyouime.eventnotifier.modmenu.ModMenuImpl"
     ]
   },
   "mixins": [
@@ -21,5 +24,13 @@
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "${minecraft_version}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "Змеёныш13": "https://t.me/zyouime13",
+        "Бот Зако": "https://t.me/liteeventbot"
+      }
+    }
   }
 }

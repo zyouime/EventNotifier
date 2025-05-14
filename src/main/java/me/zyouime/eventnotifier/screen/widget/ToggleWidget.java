@@ -14,7 +14,10 @@ public class ToggleWidget extends ButtonWidget {
     private final BooleanSetting setting;
 
     public ToggleWidget(float x, float y, BooleanSetting setting) {
-        super(x, y, 18, 8, () -> {});
+        super(x, y, 18, 8, () -> {
+            setting.setValue(!setting.getValue());
+            setting.save();
+        });
         this.setting = setting;
     }
 
@@ -27,15 +30,5 @@ public class ToggleWidget extends ButtonWidget {
         float circlePosX = x + (setting.getValue() ? 11.5f : 1.5f);
         RenderHelper.drawRoundedQuadInternal(matrix4f, circlePosX, y + 1.5f, circlePosX + 5, y + 6.5f, 2f, 4, ColorHelper.injectAlpha(Color.WHITE, 196));
         super.render(context, mouseX, mouseY);
-    }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) {
-            setting.setValue(!setting.getValue());
-            setting.save();
-            return true;
-        }
-        return false;
     }
 }
