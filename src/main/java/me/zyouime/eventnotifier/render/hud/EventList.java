@@ -25,6 +25,7 @@ public class EventList implements Wrapper {
     private float maxHeight;
     private double scrollAmount;
     private float f;
+    public boolean render;
     private final Map<String, EventDisplayInfo> eventFormatting = Map.of(
             "Босс", EventDisplayInfo.BOSS,
             "Опытный Тыпо", EventDisplayInfo.TIPO,
@@ -48,6 +49,7 @@ public class EventList implements Wrapper {
     }
 
     public void render(DrawContext context) {
+        if (!render) return;
         MatrixStack matrixStack = context.getMatrices();
         Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
         if (!events.isEmpty()) {
@@ -142,7 +144,7 @@ public class EventList implements Wrapper {
         this.maxHeight = height;
     }
 
-    private void setScrollAmount(double scrollAmount) {
+    public void setScrollAmount(double scrollAmount) {
         float totalHeight = (f * 17) + 26;
         if (totalHeight > maxHeight) {
             float maxScroll = totalHeight - maxHeight + 5;

@@ -147,6 +147,7 @@ public class ModScreen extends Screen implements Wrapper {
 
     private void setTypeAndSave(EventNotifierType type) {
         eventNotifier.events.clear();
+        eventNotifier.eventList.setScrollAmount(0);
         eventNotifier.eventType = type;
         ModConfig.loadConfig();
         ConfigData configData = ModConfig.configData;

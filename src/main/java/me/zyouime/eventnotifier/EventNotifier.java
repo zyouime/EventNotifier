@@ -11,8 +11,13 @@ import me.zyouime.eventnotifier.util.EventNotifierType;
 import me.zyouime.eventnotifier.websocket.WebSocket;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +37,7 @@ public class EventNotifier implements ModInitializer {
     private static EventNotifier instance;
     public Settings settings;
     public static final Logger LOGGER = LoggerFactory.getLogger("EventNotifier");
+    private final KeyBinding TOGGLE_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("On/Off", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_ALT, "Event Notifier"));
 
     public EventNotifier() {
         instance = this;
@@ -40,7 +46,7 @@ public class EventNotifier implements ModInitializer {
     @Override
     public void onInitialize() {
         try {
-            WEB_SOCKET = new WebSocket(new URI("ws://localhost:8080/events"));
+            WEB_SOCKET = new WebSocket(new URI("ws://minecraft-conditsii.top/eventnotifier/events"));
             WEB_SOCKET.connect();
         } catch (URISyntaxException e) {
             LOGGER.error(e.getMessage());
@@ -59,6 +65,14 @@ public class EventNotifier implements ModInitializer {
             }
         }));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (TOGGLE_KEY.wasPressed()) {
+                eventList.render = !eventList.render;
+                if (client.player != null) {
+                    String status = eventList.render ? "§aвключена" : "§cвыключена";
+                    client.player.sendMessage(Text.literal("Оповещалка " + status), true);
+                }
+            }
+
             if (eventType == EventNotifierType.UPCOMING) {
                 events.removeIf(event -> {
                     event.tick();
@@ -93,7 +107,7 @@ public class EventNotifier implements ModInitializer {
         public NumberSetting x = register(new NumberSetting("x"));
         public NumberSetting y = register(new NumberSetting("y"));
 
-        public final Map<String, BooleanSetting> eventRenderMap = Map.of(
+        private final Map<String, BooleanSetting> eventRenderMap = Map.of(
                 "Босс", showBoss,
                 "Смертельная шахта", showDeathMine,
                 "Цветочная поляна", showGlade,

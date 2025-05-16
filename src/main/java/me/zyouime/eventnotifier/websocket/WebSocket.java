@@ -13,6 +13,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CompletableFuture;
 
 public class WebSocket extends WebSocketClient implements Wrapper {
 
@@ -39,7 +40,10 @@ public class WebSocket extends WebSocketClient implements Wrapper {
         if (this.getType(type) != eventNotifier.eventType) return;
         this.setUpdate();
         JsonArray jsonArray = json.get("events").getAsJsonArray();
-        if (type.equals("current") && eventNotifier.eventType == EventNotifierType.CURRENT) events.clear();
+        if (type.equals("current") && eventNotifier.eventType == EventNotifierType.CURRENT) {
+            events.clear();
+            eventNotifier.eventList.setScrollAmount(0);
+        };
         for (JsonElement element : jsonArray.asList()) {
             JsonObject jsonObject = element.getAsJsonObject();
             String eventName = jsonObject.get("event").getAsString();
@@ -95,7 +99,7 @@ public class WebSocket extends WebSocketClient implements Wrapper {
     private synchronized void reconnectLoop() {
         if (reconnecting) return;
         reconnecting = true;
-        new Thread(() -> {
+        CompletableFuture.runAsync(() -> {
             while (!eventNotifier.WEB_SOCKET.getConnection().isOpen()) {
                 try {
                     LOGGER.info("Пробую переподключиться..");
@@ -110,6 +114,6 @@ public class WebSocket extends WebSocketClient implements Wrapper {
                 }
             }
             reconnecting = false;
-        }).start();
+        });
     }
 }

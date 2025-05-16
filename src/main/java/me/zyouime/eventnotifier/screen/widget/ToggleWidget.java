@@ -17,6 +17,7 @@ public class ToggleWidget extends ButtonWidget {
         super(x, y, 18, 8, () -> {
             setting.setValue(!setting.getValue());
             setting.save();
+            eventNotifier.eventList.setScrollAmount(0);
         });
         this.setting = setting;
     }
