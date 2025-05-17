@@ -5,7 +5,9 @@
   "name": "EventNotifier",
   "description": "Оповещалка ивентов сервера HolyWorld прямо в майнкрафте.\nИнформация берётся из бота §6Зако",
   "authors": ["zyouime13", "sp4druner"],
-  "contact": {},
+  "contact": {
+    "sources": "https://github.com/zyouime/EventNotifier/tree/without-prikol"
+  },
   "license": "MIT",
   "icon": "assets/eventnotifier/icon.png",
   "environment": "client",
