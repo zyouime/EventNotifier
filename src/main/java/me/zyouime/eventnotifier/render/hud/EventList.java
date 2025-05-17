@@ -25,7 +25,7 @@ public class EventList implements Wrapper {
     private float maxHeight;
     private double scrollAmount;
     private float f;
-    public boolean render;
+    public boolean render = true;
     private final Map<String, EventDisplayInfo> eventFormatting = Map.of(
             "Босс", EventDisplayInfo.BOSS,
             "Опытный Тыпо", EventDisplayInfo.TIPO,

@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "EventNotifier",
   "description": "Оповещалка ивентов сервера HolyWorld прямо в майнкрафте.\nИнформация берётся из бота §6Зако",
-  "authors": ["zyouime13"],
+  "authors": ["zyouime13", "sp4druner"],
   "contact": {},
   "license": "MIT",
   "icon": "assets/eventnotifier/icon.png",
