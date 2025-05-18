@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ChatScreen.class, priority = 500)
 public abstract class ChatScreenMixin extends Screen {
@@ -59,19 +60,10 @@ public abstract class ChatScreenMixin extends Screen {
         eventList.render(context);
     }
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        float eventX = this.getEventX();
-        float eventY = this.getEventY();
-        if (mouseX >= eventX + eventList.getWidth() - 14 && mouseX <= eventX + eventList.getWidth() - 5 && mouseY >= eventY + 5 && mouseY <= eventY + 14) {
-            this.client.setScreen(new ModScreen(client.currentScreen));
-        } else if (mouseX >= eventX && mouseX <= eventX + eventList.getWidth() && mouseY >= eventY && mouseY <= eventY + eventList.getHeight()) {
-            isDragging = true;
-            offsetX = (float) mouseX - eventX;
-            offsetY = (float) mouseY - eventY;
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
+//    @Override
+//    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+//        return super.mouseClicked(mouseX, mouseY, button);
+//    }
 
     @Unique
     private float getEventX() {
@@ -81,6 +73,21 @@ public abstract class ChatScreenMixin extends Screen {
     @Unique
     private float getEventY() {
         return Math.max(0, Math.min(scaledCenterY + eventList.getY(), scaledHeight - eventList.getHeight()));
+    }
+
+    @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
+    private void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+        float eventX = this.getEventX();
+        float eventY = this.getEventY();
+        if (mouseX >= eventX + eventList.getWidth() - 14 && mouseX <= eventX + eventList.getWidth() - 5 && mouseY >= eventY + 5 && mouseY <= eventY + 14) {
+            this.client.setScreen(new ModScreen(client.currentScreen));
+            cir.setReturnValue(true);
+        } else if (mouseX >= eventX && mouseX <= eventX + eventList.getWidth() && mouseY >= eventY && mouseY <= eventY + eventList.getHeight()) {
+            isDragging = true;
+            offsetX = (float) mouseX - eventX;
+            offsetY = (float) mouseY - eventY;
+            cir.setReturnValue(true);
+        }
     }
 
     @Override
@@ -113,14 +120,14 @@ public abstract class ChatScreenMixin extends Screen {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+
+    @Inject(method = "mouseScrolled", at = @At("HEAD"), cancellable = true)
+    private void mouseScrolled(double mouseX, double mouseY, double amount, CallbackInfoReturnable<Boolean> cir) {
         float eventX = this.getEventX();
         float eventY = this.getEventY();
         if (mouseX >= eventX + 2 && mouseX <= eventX + eventList.getWidth() - 2 && mouseY >= eventY + 26 && mouseY <= eventY + eventList.getHeight() - 8) {
-           return eventList.mouseScrolled(amount);
+            cir.setReturnValue(eventList.mouseScrolled(amount));
         }
-        return super.mouseScrolled(mouseX, mouseY, amount);
     }
 
     @Override
